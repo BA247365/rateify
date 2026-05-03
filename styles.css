@@ -1,0 +1,612 @@
+
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#111;background:#fafafa}
+a{color:inherit}
+.muted{color:#666}
+.small{font-size:12px}
+.container{max-width:1280px;margin:0 auto;padding:14px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;background:#fff;border-bottom:1px solid #e6e6e6}
+.brand{display:flex;align-items:center;gap:12px}
+.logo-img{height:64px;width:auto;display:block}
+.brand-text{line-height:1.25}
+.brand-sub{font-size:12px;color:#444}
+.user-status{font-size:12px;text-align:right}
+.tabs{display:flex;gap:8px;padding:10px 14px;background:#fff;border-bottom:1px solid #e6e6e6;position:sticky;top:0;z-index:5}
+.tab{border:1px solid #ddd;background:#f7f7f7;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px}
+.tab.active{background:#111;color:#fff;border-color:#111}
+.tabpanel{display:none}
+.tabpanel.active{display:block}
+
+.grid-2{display:grid;grid-template-columns:380px 1fr;gap:14px;align-items:start}
+@media(max-width:420px){.grid-2{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e6e6e6;border-radius:14px;padding:12px 12px}
+.card.info{margin-top:14px}
+.card.inner{padding:10px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+h2{margin:0 0 10px 0;font-size:16px}
+h3{margin:0 0 8px 0;font-size:14px}
+
+.sep{border:0;border-top:1px solid #eee;margin:12px 0}
+
+.btn{border:1px solid #ddd;background:#f3f3f3;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700}
+.btn.primary{background:#111;color:#fff;border-color:#111}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+.login-grid{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center}
+.login-grid label{font-size:12px;color:#333}
+.email-row{display:flex;align-items:center;gap:6px}
+.email-row input{width:100%}
+.email-domain{font-weight:700;color:#333;font-size:12px}
+.login-note{grid-column:1/-1;font-size:12px;color:#444;background:#fafafa;border:1px dashed #ddd;border-radius:10px;padding:8px}
+#loginMsg{grid-column:1/-1}
+
+textarea{width:100%;border:1px solid #ddd;border-radius:12px;padding:10px;font-family:inherit;resize:vertical;margin-top:8px}
+.searchbox{width:100%;border:1px solid #ddd;border-radius:12px;padding:10px;font-family:inherit;margin:10px 0}
+
+.row{margin-top:10px}
+.row select{width:100%;border:1px solid #ddd;border-radius:12px;padding:10px;margin-top:28px;background:#fff}
+
+.table-wrap{overflow:auto;border:1px solid #eee;border-radius:12px}
+table{border-collapse:collapse;width:100%}
+th,td{border-bottom:1px solid #eee;padding:8px 8px;vertical-align:top;font-size:13px}
+th{position:sticky;top:0;background:#fff;z-index:2;text-align:left}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.mini th,.mini td{font-size:12px;padding:7px 7px}
+.mini th{background:#fafafa}
+.mini td{vertical-align:middle}
+.mini thead tr{height:44px}
+.mini tbody tr{height:60px}
+
+
+/* --- Unified palette + row geometry for percentile bands + ABDC percentile range tables --- */
+.bands th,.bands td{font-size:12px;padding:7px 7px}
+.bands th{background:#fafafa}
+.bands td{vertical-align:middle}
+.bands thead tr{height:44px}
+.bands tbody tr{height:60px}
+
+/* Same palette for editable percentile band table */
+.bands .r-Astar td{background:#fff7f7}
+.bands .r-A td{background:#fffde7}
+.bands .r-B td{background:#f3f3f3}
+.bands .r-C td{background:#e8f5e9}
+
+/* Ensure stepper stays centered and doesn't alter row height */
+.bands .pct-stepper{display:flex;align-items:center;justify-content:center;gap:10px}
+
+
+
+
+#outputWrap{max-width:100%}
+#outputTable{min-width:1100px}
+#outputTable th{color:#111}
+.h-quick{background:#8BC34A} /* green */
+.h-abdc{background:#F4B400}  /* amber */
+.h-cs{background:#FFEB3B}    /* yellow */
+.h-snip{background:#FF4DA6}  /* magenta-ish */
+.h-sjr{background:#29B6F6}   /* blue */
+#outputTable th{border-bottom:2px solid #ddd}
+
+.ranges-layout{display:grid;grid-template-columns:300px 1fr;gap:12px;align-items:start}
+@media(max-width:980px){.ranges-layout{grid-template-columns:1fr}}
+.ranges-metric-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:980px){.ranges-metric-grid{grid-template-columns:1fr}}
+.metric-title{font-weight:800;padding:10px 12px;border-radius:14px;margin-bottom:8px;height:48px;display:flex;align-items:center}
+.metric-title.cs{background:#FFEB3B}
+.metric-title.snip{background:#FF4DA6;color:#111}
+.metric-title.sjr{background:#29B6F6;color:#111}
+
+#bandsTable input{width:84px;border:1px solid #ddd;border-radius:10px;padding:6px 6px;text-align:right;height:34px}
+.row-astar td{background:#fff7f7}
+.row-a td{background:#fffde7}
+.row-b td{background:#f3f3f3}
+.row-c td{background:#e8f5e9}
+
+/* Same palette for computed metric mini tables */
+.mini .r-Astar td{background:#fff7f7}
+.mini .r-A td{background:#fffde7}
+.mini .r-B td{background:#f3f3f3}
+.mini .r-C td{background:#e8f5e9}
+
+.prose{max-width:900px}
+.prose p{margin-top:0}
+.prose li{margin:6px 0}
+.prose ol{padding-left:18px}
+
+.corr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+@media(max-width:980px){.corr-grid{grid-template-columns:1fr}}
+canvas{max-width:100%}
+
+.press-compute{margin:10px 0;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff7ed;color:#7c2d12;font-weight:600}
+
+
+/* v18: align row heights across band + metric range tables */
+:root{--band-row-h:64px;}
+#bandsTable tbody tr{height:var(--band-row-h);} 
+#bandsTable td,#bandsTable th{vertical-align:middle;}
+.mini tbody tr{height:var(--band-row-h);} 
+.mini td,.mini th{padding:10px 10px;}
+
+
+/* Force equal row heights for percentile tables (alignment across columns) */
+:root{
+  --bands-row-h: 84px;
+  --bands-head-h: 46px;
+  --bands-cell-pad-y: 14px;
+  --bands-cell-pad-x: 16px;
+}
+
+#bandsTable{table-layout:fixed}
+#bandsTable thead th{height:var(--bands-head-h)}
+#bandsTable tbody tr{height:var(--bands-row-h)}
+#bandsTable td,#bandsTable th{padding:var(--bands-cell-pad-y) var(--bands-cell-pad-x); vertical-align:middle}
+
+#csRanges, #snipRanges, #sjrRanges{table-layout:fixed}
+#csRanges thead th, #snipRanges thead th, #sjrRanges thead th{height:var(--bands-head-h)}
+#csRanges tbody tr, #snipRanges tbody tr, #sjrRanges tbody tr{height:var(--bands-row-h)}
+#csRanges td, #snipRanges td, #sjrRanges td, #csRanges th, #snipRanges th, #sjrRanges th{
+  padding:var(--bands-cell-pad-y) var(--bands-cell-pad-x);
+  vertical-align:middle;
+}
+
+/* Make UL inputs match row height visually */
+#bandsTable input{
+  height:44px;
+  font-size:18px;
+}
+
+/* Keep table cells from collapsing */
+.mini td, .mini th{line-height:1.2}
+
+/* Center-align values; keep the first (Label) column left-aligned */
+.mini td, .mini th{ text-align:center; }
+.mini td:first-child, .mini th:first-child{ text-align:left; }
+.mini .num{ text-align:center; }
+
+/* Correlation plots */
+.plots-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px;}
+.plot-card{border:1px solid #e6e6e6;border-radius:10px;padding:10px;background:#fff;}
+.plot-title{font-weight:600;margin-bottom:6px;font-size:14px;}
+.plot{width:100%;height:320px;}
+@media (max-width: 1100px){
+  .plots-grid{grid-template-columns:1fr;}
+  .plot{height:360px;}
+}
+
+
+/* Ensure percentile and range tables align visually */
+#bandsTable, #csRanges, #snipRanges, #sjrRanges {table-layout:fixed; width:100%;}
+#bandsTable th:nth-child(1), #bandsTable td:nth-child(1) {width:70px;}
+#bandsTable th:nth-child(2), #bandsTable td:nth-child(2) {width:70px;}
+#bandsTable th:nth-child(3), #bandsTable td:nth-child(3) {width:120px;}
+
+#csRanges th:nth-child(1), #csRanges td:nth-child(1),
+#snipRanges th:nth-child(1), #snipRanges td:nth-child(1),
+#sjrRanges th:nth-child(1), #sjrRanges td:nth-child(1) {width:70px;}
+#csRanges th:nth-child(2), #csRanges td:nth-child(2),
+#snipRanges th:nth-child(2), #snipRanges td:nth-child(2),
+#sjrRanges th:nth-child(2), #sjrRanges td:nth-child(2) {width:90px;}
+#csRanges th:nth-child(3), #csRanges td:nth-child(3),
+#snipRanges th:nth-child(3), #snipRanges td:nth-child(3),
+#sjrRanges th:nth-child(3), #sjrRanges td:nth-child(3) {width:90px;}
+
+.ranges-metric-grid{align-items:start}
+.plot-canvas{width:100%;height:auto;border:1px solid #eee;border-radius:12px;background:#fff}
+
+
+.login-note-red{ color:#b00020; }
+
+
+.login-note-blue{color:#0B57D0; font-weight:600; margin-top:28px;}
+
+/* Output table: column-number row + zebra stripes */
+#outputTable thead .colnum-row th{font-size:12px; font-weight:700; padding-top:28px; padding-bottom:6px; border-bottom:2px solid #ddd; white-space:nowrap;}
+#outputTable thead .colnum-row th.colnum{background:rgba(128,18,20,0.10); color:#111;}
+#outputTable thead .colnum-row th.colnum-journal{background:#eee;}
+#outputTable tbody tr:nth-child(odd){background:rgba(128,18,20,0.06);}
+#outputTable tbody tr:nth-child(even){background:rgba(128,18,20,0.12);}
+#outputTable tbody tr:hover{background:rgba(128,18,20,0.18);}
+
+
+/* --- Table layout fixes (v3.1) --- */
+
+/* Avoid sticky header overlap / jumbled spill in narrow cards */
+.mini th{ position: static; }
+
+/* Make mini tables wrap nicely instead of expanding to header width */
+table.mini{ table-layout: fixed; width:100%; }
+table.mini th, table.mini td{
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+table.mini th:nth-child(1), table.mini td:nth-child(1){ width: 120px; }
+table.mini th:nth-child(2), table.mini td:nth-child(2){ width: 110px; }
+table.mini th:nth-child(3), table.mini td:nth-child(3){ width: 110px; }
+
+/* Output table: fixed layout with controlled wrapping */
+#outputTable{ table-layout: fixed; min-width: 980px; width: 100%; }
+#outputTable th{ white-space: normal; line-height:1.15; word-break: normal; }
+#outputTable td{ overflow:hidden; }
+
+#outputTable th:nth-child(1), #outputTable td:nth-child(1){
+  width: 280px; white-space: normal; overflow-wrap:anywhere;
+}
+#outputTable th:nth-child(2), #outputTable td:nth-child(2){
+  width: 90px; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;
+}
+#outputTable th:nth-child(3), #outputTable td:nth-child(3){ width: 90px; }
+#outputTable th:nth-child(4), #outputTable td:nth-child(4){ width: 90px; }
+#outputTable th:nth-child(5), #outputTable td:nth-child(5){ width: 140px; }
+#outputTable th:nth-child(6), #outputTable td:nth-child(6){ width: 150px; }
+#outputTable th:nth-child(7), #outputTable td:nth-child(7){ width: 90px; }
+#outputTable th:nth-child(8), #outputTable td:nth-child(8){ width: 140px; }
+#outputTable th:nth-child(9), #outputTable td:nth-child(9){ width: 90px; }
+#outputTable th:nth-child(10), #outputTable td:nth-child(10){ width: 140px; }
+#outputTable th:nth-child(11), #outputTable td:nth-child(11){ width: 110px; }
+
+#bandsTable th, #bandsTable td{white-space:normal; word-break:normal; overflow-wrap:break-word;}
+
+#csRanges th:nth-child(3), #csRanges td:nth-child(3),
+#snipRanges th:nth-child(3), #snipRanges td:nth-child(3),
+#sjrRanges th:nth-child(3), #sjrRanges td:nth-child(3){width:90px;}
+
+
+
+/* --- Demo mode: disable login UI (coming soon) --- */
+#loginCard{position:relative}
+#loginCard .login-grid{filter:grayscale(1) blur(1.2px); opacity:0.55; pointer-events:none; user-select:none}
+/* Keep notes readable even when blurred grid */
+#loginCard .note{filter:none; opacity:1; pointer-events:none}
+
+
+/* --- Prevent header squashing in tables --- */
+#bandsTable, .mini, #outputTable{table-layout:fixed; width:100%}
+#bandsTable th, .mini th, #outputTable th{white-space:normal; word-break:normal; overflow-wrap:anywhere}
+#bandsTable td, .mini td{white-space:normal; overflow-wrap:anywhere}
+
+/* Output table: keep quick code on one line but not infinite */
+#outputTable td:nth-child(2){white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px}
+#outputTable td:nth-child(1){white-space:normal; overflow-wrap:anywhere; max-width:320px}
+
+/* Compact metric mini tables (CiteScore/SNIP/SJR) */
+.mini th, .mini td{padding:10px 12px}
+.mini th:nth-child(1), .mini td:nth-child(1){width:90px}
+.mini th:nth-child(2), .mini td:nth-child(2){width:120px}
+.mini th:nth-child(3), .mini td:nth-child(3){width:120px}
+
+
+
+/* Demo banner + login coming soon */
+.coming-soon-inline{
+  font-size: 0.85em;
+  font-weight: 600;
+  color: #6b6b6b;
+}
+.brand-touch{
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  margin-top:28px;
+  color: #6b6b6b;
+}
+
+/* Percentile +/- controls (keep inside UL column, mobile-friendly) */
+.pct-stepper{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+}
+.pct-stepper input[type="number"]{
+  width: 72px;
+  max-width: 72px;
+}
+.pct-btn{
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+  background: #fff;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+}
+.pct-btn:active{ transform: translateY(1px); }
+
+/* Make the percentile-bands header row more compact */
+#bandsTable th{
+  font-size: 13px;
+  padding: 8px 10px;
+  line-height: 1.15;
+}
+
+/* Ensure UL column has room for [-][input][+] */
+#bandsTable th:nth-child(3),
+#bandsTable td:nth-child(3){
+  width: 220px;
+}
+
+/* Compact CiteScore / SNIP / SJR tables (no need for wide header-driven columns) */
+table.mini th{
+  font-size: 13px;
+  padding: 8px 10px;
+}
+table.mini td{
+  padding: 10px 10px;
+}
+table.mini th:nth-child(1), table.mini td:nth-child(1){ width: 90px; }
+table.mini th:nth-child(2), table.mini td:nth-child(2){ width: 90px; }
+table.mini th:nth-child(3), table.mini td:nth-child(3){ width: 90px; }
+
+
+/* --- Demo layout (2026-02-01) --- */
+.layout-top{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* 2-column rows */
+.grid-2{
+  display:grid;
+  grid-template-columns: 380px 1fr;
+  gap:14px;
+  align-items:start;
+}
+@media(max-width:420px){
+  .grid-2{ grid-template-columns:1fr; }
+}
+
+/* Percentile row: bands + ranges act like one wide table */
+.percentile-row{
+  grid-template-columns: 520px 1fr;
+  gap:16px;
+}
+
+/* Keep textarea comfortably tall */
+#searchCard textarea#journalInput{ min-height: 230px; }
+
+.wide-select{ width:100%; }
+
+/* Head blocks stack */
+.card-head{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+/* Align the four coloured rows across the percentile + ranges tables */
+table.bands, table.mini{ width:100%; border-collapse:separate; border-spacing:0; }
+table.bands th, table.bands td,
+table.mini th, table.mini td{
+  padding:10px 10px;
+}
+table.bands thead tr,
+table.mini thead tr{ height:44px; }
+table.bands tbody tr,
+table.mini tbody tr{ height:70px; }
+
+.demo-pill{ font-weight:600; color:#666; }
+
+
+/* v6 fixes: output table readability */
+#outputTable{table-layout:auto;border-collapse:separate;border-spacing:0}
+#outputTable th, #outputTable td{border:1px solid rgba(255,255,255,0.95)}
+#outputTable th{white-space:normal;overflow-wrap:anywhere;line-height:1.15}
+#outputTable td{vertical-align:middle}
+#outputTable th:nth-child(2), #outputTable td:nth-child(2){white-space:nowrap;min-width:120px}
+
+
+/* v7 overrides (requested tweaks) */
+#outputTable th:not(:first-child),
+#outputTable td:not(:first-child){
+  text-align: center;
+}
+#outputTable thead .colnum-row th{ text-align:center; }
+#outputTable thead .colnum-row th.colnum-journal{ text-align:left; }
+
+/* Quick code: allow wrapping (no ellipsis) */
+#outputTable th:nth-child(2),
+#outputTable td:nth-child(2){
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 160px;
+}
+
+/* Make editable percentile bands font larger (match range tables) */
+#bandsTable th, #bandsTable td{ font-size: 14px; }
+#bandsTable input{ font-size: 18px; font-weight: 700; }
+
+/* Ensure +/- controls stay inside UL cell */
+#bandsTable td:nth-child(3){ overflow: hidden; }
+
+
+/* Mega merged percentile table (editable bands + CiteScore/SNIP/SJR ranges) */
+#percentileMegaCard .mega-head{display:flex;gap:18px;align-items:flex-start;justify-content:space-between}
+#percentileMegaCard .mega-left{flex:1.1;min-width:360px}
+#percentileMegaCard .mega-right{flex:1;min-width:320px}
+
+table.mega{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border-radius:14px}
+table.mega th, table.mega td{padding:12px 12px;border-bottom:1px solid #e8e8e8;vertical-align:middle}
+table.mega thead .mega-groups th{border-bottom:0;font-weight:800;padding:10px 12px}
+table.mega thead .mega-group{background:#f3f3f3;border-radius:14px}
+table.mega thead .mega-group.cs{background:#FFEB3B}
+table.mega thead .mega-group.snip{background:#FF4DA6;color:#111}
+table.mega thead .mega-group.sjr{background:#29B6F6;color:#111}
+table.mega thead .mega-cols th{background:#fafafa;font-weight:700;padding-top:28px;padding-bottom:10px}
+
+table.mega tbody tr{height:86px}
+
+/* Mega table row colors to match mini tables */
+table.mega .r-Astar td{background:#fff7f7;}
+table.mega .r-A td{background:#fffde7;}
+table.mega .r-B td{background:#f3f3f3;}
+table.mega .r-C td{background:#e8f5e9;}
+
+table.mega td.num, table.mega th.num{text-align:center}
+
+/* Keep stepper compact and centered */
+table.mega .pct-stepper{display:inline-flex;gap:8px;align-items:center;justify-content:center}
+table.mega .pct-btn{width:42px;height:42px;border-radius:14px}
+table.mega input[type="number"]{width:92px}
+
+
+/* --- Mega merged percentile table fixes (v13b) --- */
+table.mega{table-layout:fixed}
+table.mega col.c-eb-label{width:120px}
+table.mega col.c-eb-ll{width:70px}
+table.mega col.c-eb-ul{width:160px}
+
+table.mega col.c-cs-label,
+table.mega col.c-snip-label,
+table.mega col.c-sjr-label{width:80px}
+table.mega col.c-cs-ll, table.mega col.c-cs-ul,
+table.mega col.c-snip-ll, table.mega col.c-snip-ul,
+table.mega col.c-sjr-ll, table.mega col.c-sjr-ul{width:95px}
+
+table.mega td.num, table.mega th.num{white-space:nowrap}
+table.mega td, table.mega th{overflow-wrap:normal; word-break:normal}
+table.mega thead .mega-groups th{white-space:normal; overflow-wrap:break-word; word-break:normal; line-height:1.1}
+table.mega thead .mega-cols th{white-space:nowrap}
+table.mega tbody td{font-variant-numeric: tabular-nums}
+table.mega td:nth-child(3){white-space:nowrap} /* UL stepper cell */
+
+.smallcaps{font-variant:all-small-caps;letter-spacing:.06em}
+
+.data-error{background:#fee;border:1px solid #f99;color:#900;padding:10px 12px;border-radius:10px;margin:12px 0;font-weight:700}
+
+.data-table thead th{background:#111;color:#fff;}
+.data-table thead th{cursor:pointer}
+
+/* Light header variant for ABDC tables (white table + light grey grid) */
+.data-table.light-head thead th{background:#fafafa;color:#111;}
+.data-table.light-head thead th.h-cs{background:#FFE066;color:#111;}
+.data-table.light-head thead th.h-snip{background:#FFB3C1;color:#111;}
+.data-table.light-head thead th.h-sjr,
+.data-table.light-head thead th.h-q{background:#9BE7FF;color:#111;}
+
+/* Ensure table body stays plain white (no zebra/highlight) */
+.data-table.light-head tbody tr{background:#fff;}
+
+/* Info (i) dot on Search tab */
+.info-dot{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;border:1px solid #bbb;margin-left:8px;font-size:12px;line-height:18px;color:#444;background:#fff;}
+.info-dot:hover{border-color:#666;color:#111}
+
+/* Simple modal */
+.modal{position:fixed;inset:0;z-index:9999;}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.25)}
+.modal-card{position:relative;max-width:680px;margin:80px auto 0;background:#fff;border-radius:16px;border:1px solid #e6e6e6;box-shadow:0 20px 70px rgba(0,0,0,0.25);padding:0;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #eee;}
+.modal-title{font-weight:700}
+.modal-close{background:transparent;border:none;font-size:26px;line-height:1;cursor:pointer;color:#444}
+.modal-close:hover{color:#111}
+.modal-body{padding:14px 16px;}
+.modal-body p{margin:0 0 10px 0;}
+
+.click-sort{margin:6px 0 8px 0}
+
+.plot-card{position:relative}
+.plot-title{color:#1a7f37;font-weight:700}
+.plot-title .muted{color:#666;font-weight:400}
+.plot-wrap{position:relative}
+.r-pill{position:absolute;top:28px;left:64px;right:auto;background:rgba(128,18,20,0.12);color:#801214;border:1px solid rgba(128,18,20,0.25);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;pointer-events:none;z-index:5;}
+
+
+/* ABDC table: sticky S# column */
+#abdcTable th.scol, #abdcTable td.scol{position:sticky;left:0;background:#fff;z-index:2;border-right:1px solid #e6e6e6;}
+#abdcTable th.scol{z-index:3;;position:sticky;left:0;z-index:2}
+#abdcTable th.scol, #abdcTable td.scol{width:44px;min-width:44px;max-width:44px;text-align:right;padding-right:8px;font-size:11px;color:#666;;position:sticky;left:0;z-index:2}
+
+/* Move r-pill inside plot area (avoid axis labels) */
+.plot-wrap .r-pill{top:28px;left:64px;}
+
+.pager{display:flex;align-items:center;gap:10px;margin:10px 0}
+.pager-info{color:#666;font-size:12px}
+.smallbtn{padding:6px 10px;font-size:12px}
+
+
+/* Methodology footnotes */
+.footnote{font-size:12px; color:#444; margin-top:-8px;}
+.footnote code{font-size:12px;}
+
+.footnote-sep{border:0;border-top:1px solid #e5e7eb;margin:14px 0 10px 0;}
+
+/* Search suggestions (grey pills) */
+.suggestions{ margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; }
+.sug-pill{ background:#efefef; color:#333; border:1px solid #d8d8d8; border-radius:999px; padding:6px 10px; font-size:13px; cursor:pointer; }
+.sug-pill:hover{ background:#e7e7e7; }
+.sug-label{ font-size:13px; color:#666; margin-right:6px; }
+.match-note{ font-size:12px; color:#666; margin-top:4px; }
+
+
+
+/* Search header counter */
+.card-head-row{ display:flex; justify-content:space-between; align-items:center; width:100%; gap:12px; }
+.counter{ font-size:12px; color:#666; font-weight:600; white-space:nowrap; }
+.counter.over{ color:#b00020; }
+
+/* Search UX (typeahead + paste suggestions) */
+.search-sections{ display:flex; flex-direction:column; gap:14px; margin-top:10px; }
+.search-section-title{ font-weight:700; margin-bottom:4px; }
+.search-divider{ height:1px; background:#e6e6e6; margin:6px 0; }
+.typeahead-row{ display:flex; gap:8px; align-items:center; margin-top:8px; }
+.typeahead-row .text{ flex:1; padding:10px 12px; border:1px solid #d7d7d7; border-radius:12px; font-size:16px; }
+.typeahead-dropdown{ margin-top:6px; border:1px solid #d7d7d7; border-radius:12px; background:#fff; max-height:260px; overflow:auto; box-shadow:0 6px 18px rgba(0,0,0,.08); }
+.typeahead-item{ display:block; width:100%; text-align:left; padding:10px 12px; background:#fff; border:0; border-bottom:1px solid #eee; cursor:pointer; }
+.typeahead-item:last-child{ border-bottom:0; }
+.typeahead-item:hover{ background:#f6f6f6; }
+.manual-list{ margin-top:10px; }
+.manual-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.manual-tag{ display:inline-flex; gap:8px; align-items:center; background:#f3f3f3; border:1px solid #e0e0e0; padding:6px 10px; border-radius:999px; }
+.tag-x{ border:0; background:transparent; font-size:18px; line-height:1; cursor:pointer; color:#444; padding:0 2px; }
+
+
+/* ABDC close-match assist */
+.variant-flag{font-size:11px;color:#666;margin-top:4px;margin-bottom:4px}
+.confirm-badge{font-size:11px;color:#0a6;margin-top:4px}
+.btn.tinybtn{padding:3px 8px;font-size:11px;border-radius:999px}
+.abdc-choicebox{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+.abdc-choicebox .sug-pill{background:#eee;color:#333}
+
+
+/* How-to collapsible */
+.howto {
+  margin: 0 0 10px 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 10px;
+  background: rgba(0,0,0,0.02);
+}
+.howto summary {
+  cursor: pointer;
+  font-weight: 700;
+  user-select: none;
+  list-style: none;
+}
+.howto summary::-webkit-details-marker { display: none; }
+.howto summary:before {
+  content: "▾";
+  display: inline-block;
+  width: 1.2em;
+  margin-right: 6px;
+  transition: transform 0.15s ease;
+}
+.howto[open] summary:before { transform: rotate(180deg); }
+.howto-body {
+  margin-top: 8px;
+}
+.howto-body ul {
+  margin: 6px 0 0 18px;
+}
+.howto-tips {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0,0,0,0.10);
+}

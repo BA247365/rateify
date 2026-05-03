@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Rateify</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="logo-img" src="assets/rateify_logo.png" alt="Rateify logo"/>
+      <div class="brand-text">
+        <div class="brand-sub">Developed by Bhargav Adhvaryu, Amrut Mody School of Management, Ahmedabad University, India</div>
+        <div class="brand-sub">Version: 2026-03-01 (beta)</div>
+        <div class="brand-touch">THIS TOOL IS TOUCH-SCREEN FRIENDLY.</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div id="userStatus" class="user-status muted" style="display:none"></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Rateify tabs">
+    <button class="tab active" data-tab="search">Search</button>
+    <button class="tab" data-tab="methodology">Methodology</button>
+    <button class="tab" data-tab="abdcdb">ABDC database</button>
+    <button class="tab" data-tab="abdcremove">ABDC &ldquo;Remove list&rdquo;</button>
+    <button class="tab" data-tab="scopusdb">Scopus database</button>
+    <button class="tab" data-tab="corr">Correlations</button>
+  </nav>
+
+  <main class="container">
+    <div id="dataErrorBanner" class="data-error" style="display:none"></div>
+    <!-- SEARCH TAB -->
+    <section id="tab-search" class="tabpanel active">
+      
+      <div class="layout-top">
+  <div class="grid-2 top-row">
+    <div class="card login-card" id="loginCard">
+      <div class="card-head">
+        <h2>Login <span class="coming-soon-inline">(coming soon…)</span></h2>
+      </div>
+      <div class="login-grid">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="name@ahduni.edu.in" autocomplete="email" required value="dummy@univeristy.edu">
+
+        <label for="fullName">Name</label>
+        <input id="fullName" type="text" required value="Harry Potter">
+
+        <label for="designation">Designation</label>
+        <input id="designation" type="text" required value="Professor of Alchemy">
+
+        <label for="schoolDept">School/Department</label>
+        <input id="schoolDept" type="text" required value="School of Witchcraft">
+
+        <label for="universityOrg">University/Organisation</label>
+        <input id="universityOrg" type="text" required value="University of Wizardry">
+
+        <div class="login-note login-note-blue">Above fields are mandatory as they are required to export search query output.</div>
+        <div class="login-note login-note-red">Note: Only <b>@ahduni.edu.in</b> or registered external email IDs are allowed.</div>
+
+        <button id="btnSignIn" class="btn primary" disabled>Sign in</button>
+        <div id="loginMsg" class="muted small"></div>
+      </div>
+    </div>
+
+    
+<div class="card" id="searchCard">
+  <div class="card-head">
+    
+    <details class="howto" id="howtoRateify">
+      <summary>How to use Rateify</summary>
+      <div class="howto-body">
+        <ul>
+          <li>Enter journal titles in the individual or bulk add space (<b>total up to 10</b>).</li>
+          <li>Ensure the correct <b>percentile band method</b> is selected (default: <b>Quartiles</b>).</li>
+          <li>Click <b>Compute</b> to generate the table (ABDC rating + Scopus metrics).</li>
+          <li>If ABDC shows <b>“na”</b> with the grey pill <b>“Choose ABDC close match”</b>, click it and select the closest ABDC title variant.</li>
+          <li>Optional: click <b>Export CSV</b> to download results.</li>
+        </ul>
+        <div class="howto-tips">
+          <b>Tips</b>
+          <ul>
+            <li>Use the most official journal title (avoid abbreviations).</li>
+            <li>Matching is <b>case-insensitive</b>, but <b>punctuation and symbols matter</b> (e.g., <code>: ; , - &amp;</code>).</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <div class="card-head-row">
+      <h2>Search journals (max 10)</h2>
+      <div id="searchCounter" class="counter">0 / 10 journals added</div>
+    </div>
+    <div class="small muted search-note">
+      You may add journals individually and/or paste a list. Maximum 10 journals total.
+    </div>
+  </div>
+
+  <div class="search-sections">
+    <div class="search-section">
+      <div class="search-section-title">Add journals individually</div>
+      <div class="small muted">
+        Type journal name. Click a suggestion or press return/enter to add (up to 10 allowed).
+      </div>
+      <div class="typeahead-row">
+        <input id="journalTypeInput" class="text" type="text" placeholder="Type the journal title…" autocomplete="off">
+      </div>
+      <div id="typeaheadDropdown" class="typeahead-dropdown" style="display:none"></div>
+      <div id="manualList" class="manual-list" aria-live="polite"></div>
+    </div>
+
+    <div class="search-divider"></div>
+
+    <div class="search-section">
+      <div class="search-section-title">Paste journal list</div>
+      <div class="small muted">
+        Enter each journal name and press return/enter, or paste up to 10 names (one per line). Entry is punctuation-sensitive (e.g., ; , -) but not case-sensitive. Similar title suggestions may appear below.
+      </div>
+      <textarea id="journalInput" rows="8" placeholder="Enter journal names, one per line…"></textarea>
+      <div id="searchSuggestions" class="suggestions" style="display:none"></div>
+    </div>
+  </div>
+
+  <div id="searchLimitMsg" class="small" style="margin-top:8px;color:#b00020;display:none"></div>
+</div>
+
+  <div class="card" id="percentileMegaCard">
+    <div class="card-head mega-head">
+      <div class="mega-left">
+        <h2>Select percentile bands</h2>
+        <select id="presetBands" class="wide-select">
+          <option value="default" selected>Default (Quartiles, 25/25/25/25)</option>
+          <option value="alt1">Alt bands 1 (10/30/30/30)</option>
+          <option value="alt2">Alt bands 2 (10/20/30/40)</option>
+          <option value="custom">Custom</option>
+        </select>
+        <div class="muted small">Editable percentile bands (same for CiteScore, SNIP, and SJR)</div>
+        <div id="bandsMsg" class="small" style="margin-top:8px;color:#b00020"></div>
+      </div>
+      <div class="mega-right">
+        <h2>ABDC percentile ranges</h2>
+        <div class="muted small">Value ranges (computed from ABDC–Scopus matched set)</div>
+      </div>
+    </div>
+
+    <table class="mega" id="bandsTable"></table>
+
+    <div class="row" style="margin-top:10px">
+      <button id="btnCompute" class="btn">Compute</button>
+    </div>
+  </div>
+
+
+</div>
+</div>
+
+      <div class="card output-card" id="outputCard">
+          <div class="card-head">
+            <h2>Output</h2>
+            <button id="btnExport" class="btn" disabled>Export CSV</button>
+          </div>
+          <div id="outputWrap" class="table-wrap">
+            <table id="outputTable">
+              <thead>
+                <tr>
+                  <th class="h-input">Journal<br>name</th>
+                  <th class="h-quick">Quick<br>code</th>
+                  <th class="h-abdc">ABDC<br>rating</th>
+                  <th class="h-cs">CiteScore</th>
+                  <th class="h-cs">ABDC equivalent<br>(CiteScore)</th>
+                  <th class="h-cs">Top 10% CiteScore<br>percentile</th>
+                  <th class="h-snip">SNIP</th>
+                  <th class="h-snip">ABDC equivalent<br>(SNIP)</th>
+                  <th class="h-sjr">SJR</th>
+                  <th class="h-sjr">ABDC equivalent<br>(SJR)</th>
+                  <th class="h-sjr">SJR<br>Quartile</th>
+                </tr>
+                <tr class="colnum-row">
+                  <th class="colnum-journal"></th>
+                  <th class="colnum">(1)</th>
+                  <th class="colnum">(2)</th>
+                  <th class="colnum">(3)</th>
+                  <th class="colnum">(4)</th>
+                  <th class="colnum">(5)</th>
+                  <th class="colnum">(6)</th>
+                  <th class="colnum">(7)</th>
+                  <th class="colnum">(8)</th>
+                  <th class="colnum">(9)</th>
+                  <th class="colnum">(10)</th>
+                </tr>
+              </thead>
+              <tbody id="outputBody"></tbody>
+            </table>
+          </div>
+
+          <div class="muted small" id="policyNote"></div>
+          <div class="muted small" id="quickCodeNote">Quick code is an amalgamation of Columns 2-4-7-9-10.</div>
+      </div>
+</section>
+
+    <!-- METHODOLOGY TAB -->
+    <section id="tab-methodology" class="tabpanel">
+      <div class="card">
+        <h2>Methodology</h2>
+                <div class="prose">
+          <p>This note describes a method to establish ABDC equivalence for journals not listed in ABDC but listed in Scopus.</p>
+
+          <p><strong>1.</strong> The ABDC journal list called the “Draft 2025 ABDC Journal Quality List” (2659 journals, listed in <strong>ABDC database</strong>) is matched with the Scopus list 2023 (29,755 journals, see <strong>Scopus database</strong>).</p>
+
+          <p><strong>2.</strong> About 1702 journals are common between the two lists. For these common journals, the three scores, namely CiteScore, SNIP, and SJR, are extracted (see <strong>ABDC database</strong>).</p>
+
+          <p><strong>3.</strong> By default, four quartile ranges are created for the three scores.<sup>&dagger;</sup> However, the user can change the range of the four slices, eg, for A*/A/B/C, as 10/20/20/40 or 10/30/30/30, etc.</p>
+
+          <p><strong>4.</strong> In the <strong>Search</strong> tab, enter the journal name(s). Once the name(s) are entered, the search outputs the following ten values. Note that if a journal is not listed in ABDC then “na” is returned and if a journal is not listed in Scopus then “#N/A” is returned: (1) Quick code (amalgamation of #2–4–7–9–10); (2) ABDC rating; (3) CiteScore value; (4) ABDC equivalent (CiteScore); (5) Top 10% CiteScore percentile; (6) SNIP value; (7) ABDC equivalent (SNIP); (8) SJR value; (9) ABDC equivalent (SJR); (10) SJR Quartile.</p>
+
+          <p>The correlation between CiteScore, SNIP, and SJR for Scopus is shown in the <strong>Correlations</strong> tab.</p>
+        
+          <p><strong>Note:</strong> This tool is currently in test mode. Journals are matched primarily by title, with ISSN used as a secondary validation check. If ISSNs differ between sources, the result is flagged for transparency. In addition, ABDC and Scopus may use slightly different journal titles. When an exact ABDC title match is not found but a close match is likely, the tool may suggest 1–3 closest ABDC titles for user confirmation. If you notice any issues, score discrepancies, or journal title mismatches, please report them.</p>
+          <hr class="footnote-sep"/>
+          <p class="footnote"><sup>&dagger;</sup> The percentile bands are computed dynamically from the matched ABDC–Scopus overlap (N = 1702) using Excel-style <code>QUARTILE.INC</code> / <code>PERCENTILE.INC</code>. For journals near LL/UL boundary cutoffs, score values may fall into adjacent bands due to tied values at the threshold.</p>
+</div>
+      </div>
+    </section>
+
+    <!-- ABDC DB TAB -->
+    <section id="tab-abdcdb" class="tabpanel">
+      <div class="card">
+        <div class="card-head">
+          <h2>ABDC database</h2>
+          <div class="muted small">View-only copy of the 2025 list you provided. Search title / ISSN. Export is not enabled here.</div>
+        </div>
+
+        <div class="row gap">
+          <input id="abdcSearch" class="searchbox" type="text" placeholder="Search title / ISSN…"/>
+        </div>
+
+        <div class="muted small click-sort">Click header to sort.</div>
+        <div class="table-wrap">
+          <table class="data-table light-head" id="abdcTable">
+  <thead>
+    <tr>
+      <th class="scol">S#</th>
+      <th>Journal Title</th>
+      <th>2022</th>
+      <th>2025</th>
+      <th class="h-cs">CiteScore</th>
+      <th class="h-snip">SNIP</th>
+      <th class="h-sjr">SJR</th>
+      <th>Publisher</th>
+      <th>ISSN</th>
+      <th>eISSN</th>
+      <th>Year</th>
+      <th>FoR</th>
+      <th>Recommendation</th>
+    </tr>
+  </thead>
+  <tbody id="abdcBody"></tbody>
+</table>
+        </div>
+
+        <div class="pager" id="abdcPager">
+          <button class="btn smallbtn" id="abdcPrev" disabled>&larr; Prev 600</button>
+          <div class="pager-info" id="abdcPageInfo"></div>
+          <button class="btn smallbtn" id="abdcNext" disabled>Next 600 &rarr;</button>
+        </div>
+        <div class="muted small" id="abdcCount"></div>
+      </div>
+    </section>
+
+    <!-- ABDC REMOVE LIST TAB -->
+    <section id="tab-abdcremove" class="tabpanel">
+      <div class="card">
+        <div class="card-head">
+          <h2>ABDC &ldquo;Remove list&rdquo;</h2>
+          <div class="muted small">View-only copy of journals marked as removed in the draft 2025 list. Search title / ISSN.</div>
+        </div>
+
+        <div class="row gap">
+          <input id="abdcRemoveSearch" class="searchbox" type="text" placeholder="Search title / ISSN…"/>
+        </div>
+
+        <div class="muted small click-sort">Click header to sort.</div>
+        <div class="table-wrap">
+          <table class="data-table light-head" id="abdcRemoveTable">
+            <thead>
+              <tr>
+                <th class="scol">S#</th>
+                <th>Journal Title</th>
+                <th>2022</th>
+                <th>2025</th>
+                <th class="h-cs">CiteScore</th>
+                <th class="h-snip">SNIP</th>
+                <th class="h-sjr">SJR</th>
+                <th>Publisher</th>
+                <th>ISSN</th>
+                <th>eISSN</th>
+                <th>Year</th>
+                <th>FoR</th>
+                <th>Recommendation</th>
+              </tr>
+            </thead>
+            <tbody id="abdcRemoveBody"></tbody>
+          </table>
+        </div>
+
+        <div class="pager" id="abdcRemovePager">
+          <button class="btn smallbtn" id="abdcRemovePrev" disabled>&larr; Prev 600</button>
+          <div class="pager-info" id="abdcRemovePageInfo"></div>
+          <button class="btn smallbtn" id="abdcRemoveNext" disabled>Next 600 &rarr;</button>
+        </div>
+        <div class="muted small" id="abdcRemoveCount"></div>
+      </div>
+    </section>
+
+
+    <!-- SCOPUS DB TAB -->
+    <section id="tab-scopusdb" class="tabpanel">
+      <div class="card">
+        <div class="card-head">
+          <h2>Scopus database</h2>
+          <div class="muted small">Search title / ISSN.</div>
+        </div>
+        <input id="scopusSearch" class="searchbox" type="text" placeholder="Search Scopus title / ISSN…"/>
+        <div class="muted small click-sort">Click header to sort.</div>
+        <div class="table-wrap">
+          <table class="data-table" id="scopusTable">
+            <thead>
+              <tr>
+                <th>Title</th><th>ISSN</th><th>eISSN</th><th>CiteScore</th><th>SNIP</th><th>SJR</th><th class="h-q">Quartile</th>
+              </tr>
+            </thead>
+            <tbody id="scopusBody"></tbody>
+          </table>
+        </div>
+
+        <div class="pager" id="scopusPager">
+          <button class="btn smallbtn" id="scopusPrev" disabled>&larr; Prev 600</button>
+          <div class="pager-info" id="scopusPageInfo"></div>
+          <button class="btn smallbtn" id="scopusNext" disabled>Next 600 &rarr;</button>
+        </div>
+        <div class="muted small" id="scopusCount"></div>
+      </div>
+    </section>
+
+    <!-- CORRELATION TAB -->
+    <section id="tab-corr" class="tabpanel">
+      <div class="card">
+        <h2>Scatter plots and Pearson&#39;s correlation coefficient</h2>
+        <div class="plots-grid">
+          <div class="plot-card">
+            <div class="plot-title">CiteScore vs SNIP <span class="muted small" id="n_cs_snip"></span></div>
+            <div class="plot-wrap">
+              <div class="r-pill" id="r_cs_snip">r=…</div>
+              <canvas id="plot_cs_snip" class="plot-canvas" width="520" height="360"></canvas>
+            </div>
+          </div>
+          <div class="plot-card">
+            <div class="plot-title">CiteScore vs SJR <span class="muted small" id="n_cs_sjr"></span></div>
+            <div class="plot-wrap">
+              <div class="r-pill" id="r_cs_sjr">r=…</div>
+              <canvas id="plot_cs_sjr" class="plot-canvas" width="520" height="360"></canvas>
+            </div>
+          </div>
+          <div class="plot-card">
+            <div class="plot-title">SNIP vs SJR <span class="muted small" id="n_snip_sjr"></span></div>
+            <div class="plot-wrap">
+              <div class="r-pill" id="r_snip_sjr">r=…</div>
+              <canvas id="plot_snip_sjr" class="plot-canvas" width="520" height="360"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

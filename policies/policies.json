@@ -1,0 +1,72 @@
+[
+  {
+    "id": "abdc_value_percentiles_v1",
+    "name": "ABDC percentile ranges (editable) \u2192 value cutoffs",
+    "description": "Derives CiteScore/SNIP/SJR value cutoffs from the ABDC-matched set using editable percentile bands (UL only). Applies those cutoffs to any Scopus journal to compute ABDC-equivalent labels.",
+    "basis": {
+      "type": "abdc_value_percentiles"
+    },
+    "display_note": "Editable ABDC reference percentiles are shown below."
+  },
+  {
+    "id": "quartile_v1",
+    "name": "Quartiles \u2192 A*/A/B/C (default)",
+    "description": "Maps Scopus quartiles to A*/A/B/C: Q1=A*, Q2=A, Q3=B, Q4=C. Uses scopus_quartile.",
+    "basis": {
+      "type": "quartile",
+      "field": "scopus_quartile"
+    },
+    "bands": [
+      {
+        "value": 1,
+        "label": "A*"
+      },
+      {
+        "value": 2,
+        "label": "A"
+      },
+      {
+        "value": 3,
+        "label": "B"
+      },
+      {
+        "value": 4,
+        "label": "C"
+      }
+    ],
+    "display_note": "Scopus quartile mapping used: Q1=A*, Q2=A, Q3=B, Q4=C."
+  },
+  {
+    "id": "percentile_10_70_50_v1",
+    "name": "Percentiles: Top10=A*, 90\u201370=A, 70\u201350=B, <50=C",
+    "description": "Maps CiteScore percentile to A*/A/B/C using bands: [90,100]=A*, [70,90)=A, [50,70)=B, [0,50)=C. Uses citescore_percentile.",
+    "basis": {
+      "type": "percentile",
+      "field": "citescore_percentile",
+      "scope": "global"
+    },
+    "bands": [
+      {
+        "min": 90,
+        "max": 100,
+        "label": "A*"
+      },
+      {
+        "min": 70,
+        "max": 90,
+        "label": "A"
+      },
+      {
+        "min": 50,
+        "max": 70,
+        "label": "B"
+      },
+      {
+        "min": 0,
+        "max": 50,
+        "label": "C"
+      }
+    ],
+    "display_note": "CiteScore percentile bands used: 90\u2013100=A*, 70\u2013<90=A, 50\u2013<70=B, <50=C (global)."
+  }
+]
